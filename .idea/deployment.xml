@@ -5,7 +5,7 @@
       <paths name="t.shn-host.ru">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/suojzlvz/public_html/avito" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/home3/suojzlvz/public_html/avito" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

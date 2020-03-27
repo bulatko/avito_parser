@@ -1,7 +1,7 @@
 <?php
 
 
-function get_content($url, $data = [], $getlink = null)
+function get_content($url, $data = null, $headers = [])
 {
 
     $ch = curl_init($url);
@@ -9,6 +9,7 @@ function get_content($url, $data = [], $getlink = null)
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     }
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_COOKIEJAR, __DIR__ . 'cookie.txt');
@@ -16,6 +17,34 @@ function get_content($url, $data = [], $getlink = null)
     $res = curl_exec($ch);
     curl_close($ch);
     return $res;
+}
+
+function check_captcha($url){
+    $data = get_content($url);
+    if(stristr($data, 'form-captcha-image js-form-captcha-image')){
+        $doc = phpQuery::newDocument($data);
+        $captcha = $doc->find('img.form-captcha-image.js-form-captcha-image')->attr('src');
+        $img = get_content("http://avito.ru$captcha");
+        $file = "test.jpg";
+        $fle = fopen($file, 'w+');
+        fwrite($fle, $img);
+        fclose($fle);
+        return 0;
+    }
+    return $data;
+}
+
+function solve_captcha(){
+    $captcha = get_content("test.jpg");
+    $url = "https://www.avito.ru/blocked";
+    $data = ['captcha' => $captcha,
+        'submit' => ''];
+    $res = get_content($url, $data);
+    $res = json_decode($res, 1);
+    if(isset($res['image64']))
+        return 1;
+    else return 0;
+
 }
 
 
