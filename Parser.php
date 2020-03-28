@@ -38,13 +38,14 @@ class Parser{
                 $id = $item['id'];
                 $title = $item['title'];
                 $href = $item['uri_mweb'];
+                $time = $item['time'];
                 $phone_data = "https://m.avito.ru/api/1/items/" .
                     "$id/phone?" .
                     "key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir";
                 $q = $this->query;
                 echo "$title";
                 if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id"))){
-                    $this->mysqli->query("insert into ads values(0, '$q', '$id', '$title', '$href', '$phone_data', '', '')");
+                    $this->mysqli->query("insert into ads values(0, '$q', '$id', '$title', '$href', '$phone_data', '$time', '')");
                     echo " Added<BR>";
                 } else
                     if($update)

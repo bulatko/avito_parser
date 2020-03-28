@@ -15,6 +15,6 @@ if(isset($_GET['captcha'])){
 
 $p = new Parser($mysqli);
 
-$p->parse();
+$p->parse(1, 0);
 
 
