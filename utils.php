@@ -1,5 +1,5 @@
 <?php
-
+include 'CONSTS.php';
 
 function get_content($url, $data = null, $headers = [], $file_name = '')
 {
@@ -83,4 +83,42 @@ function phoneDemixer($t, $e) {
             $a .= substr($n, $o, 1);
 
     return $a;
+}
+
+function get_data($q, $p = -1, $offset = 0)
+{
+    global $DATA, $mysqli;
+    $get_data = [];
+    $n = $q;
+    for ($i = 0; $i < count($DATA); $i++) {
+        if ($n >= pow(2, count($DATA) - $i - 1)) {
+            $get_data[] = $DATA[count($DATA) - $i - 1];
+            $n -= pow(2, count($DATA) - $i - 1);
+        }
+    }
+    $i = 0;
+    $q = 'select * from ads where (';
+    foreach ($get_data as $data) {
+        if ($i)
+            $q .= 'or ';
+        $q .= "query = '$data' ";
+        $i++;
+    }
+    $q .= ')' . ($p != -1 ? " and phone = " . $p : " and phone != 0");
+    $q .= " order by time desc";
+    $data = [];
+    $data['count'] = mysqli_num_rows($mysqli->query($q));
+    $q .= " limit $offset, 50";
+    $q = $mysqli->query($q);
+    $elts = [];
+    while ($row = mysqli_fetch_array($q)) {
+        $element = ['query' => $row[1],
+            'title' => $row[3],
+            'href' => $row[4],
+            'time' => $row[6] + 3 * 3600,
+            'phone' => $row[7]];
+        $elts[] = $element;
+    }
+    $data['elements'] = $elts;
+    return $data;
 }

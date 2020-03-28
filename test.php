@@ -3,6 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require 'Parser.php';
+include 'CONSTS.php';
 require 'bd.php';
 
 if(isset($_GET['captcha'])){
@@ -12,9 +13,10 @@ if(isset($_GET['captcha'])){
     $res = get_content($url, $data);
     echo "$res<br><br><br><br><br>";
 }
+foreach($DATA as $q) {
+    $p = new Parser($mysqli, $q);
 
-$p = new Parser($mysqli);
-
-$p->parse(1, 0);
+    $p->parse(1, 0);
+}
 
 

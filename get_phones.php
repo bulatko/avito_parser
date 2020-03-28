@@ -14,5 +14,5 @@ while($row = mysqli_fetch_array($q)){
     $data = substr($data, strlen($data) - 11, 11);
     echo $data . "<BR><BR><BR><BR>";
     $mysqli->query("update ads set phone = '$data' where id = $id");
-    sleep(1);
+    sleep(0.3);
 }

@@ -22,7 +22,7 @@ class Parser{
         while (1) {
         $url = "https://m.avito.ru/api/9/items?key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir&" .
             "query=" . $this->query . "&" .
-            "locationId=107620&" .
+            "locationId=107620&sort=date&" .
             "categoryId=19&amp;params[44]=144&" .
             "page=" . $page . "&" .
             "lastStamp=" . (time() - 100) . "&" .
@@ -44,9 +44,11 @@ class Parser{
                     "key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir";
                 $q = $this->query;
                 echo "$title";
-                if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id"))){
-                    $this->mysqli->query("insert into ads values(0, '$q', '$id', '$title', '$href', '$phone_data', '$time', '')");
-                    echo " Added<BR>";
+                if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id and query = '$q'"))){
+                    if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id"))) {
+                        $this->mysqli->query("insert into ads values(0, '$q', '$id', '$title', '$href', '$phone_data', '$time', '')");
+                        echo " Added<BR>";
+                    }
                 } else
                     if($update)
                         return;
