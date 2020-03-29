@@ -19,5 +19,3 @@ if (mysqli_connect_errno()) {
 $mysqli->query('SET NAMES utf8mb4_unicode_ci.');
 $mysqli->query("SET CHARACTER SET 'utf8mb4_unicode_ci.'");
 
-
-?>

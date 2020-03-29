@@ -43,7 +43,10 @@ class Parser{
                     "$id/phone?" .
                     "key=af0deccbgcgidddjgnvljitntccdduijhdinfgjgfjir";
                 $q = $this->query;
+                if(!$id)
+                    continue;
                 echo "$title";
+
                 if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id and query = '$q'"))){
                     if(!mysqli_num_rows($this->mysqli->query("select * from ads where ad_id = $id"))) {
                         $this->mysqli->query("insert into ads values(0, '$q', '$id', '$title', '$href', '$phone_data', '$time', '')");

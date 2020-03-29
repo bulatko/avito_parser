@@ -34,7 +34,17 @@ include 'CONSTS.php';
         if($num >= pow(2, count($DATA) - $i - 1))
         $num -= pow(2, count($DATA) - $i - 1);
 }
+    if(isset($_GET['new']))
+        $new = $_GET['new'];
+    else
+        $new = 0;
+    $c2 = $new ? "checked" : "";
+    $c1 = !$new ? "checked" : "";
+
+    echo "<p>Поиск по: </p>
+    Всем<input type=\"radio\" name=\"find\" id=\"radio_all\" $c1>   Новичкам<input name=\"find\" type=\"radio\" id=\"radio_new\" $c2><br><br>"
     ?>
+
     <input type="hidden" name="q" id="sum" value="<?echo $q?>">
     <input type="button" value="Поиск" id="go_button">
 </form>
@@ -47,8 +57,8 @@ include 'CONSTS.php';
             console.log($(this).val() + "  " + $(this).is(':checked'));
             sum += $(this).is(':checked') ? Math.pow(2,  $(this).val()) : 0;
         });
-
-        let url = "?q=" + sum;
+        let New = $("#radio_all").is(':checked') ? 0 : 1;
+        let url = "?q=" + sum + "&new=" + New;
 
         window.location = url;
 
@@ -66,7 +76,7 @@ if(isset($_GET['p']))
 else
     $p = -1;
 
-$data = get_data($q, $p, $offset);
+$data = get_data($q, $p, $offset, $new);
 
 $i = 1;
 $c = $data['count'];
@@ -94,7 +104,7 @@ foreach($data['elements'] as $element){
 }
 $o1 = max(0, $offset - 50);
 $o2 = min($c, $offset + 50);
-echo $offset > 0 ? "<a href='?q=$q&p=$p&offset=$o1'>Назад</a> " : " ";
-echo $offset + 50 < $c ? "<a href='?q=$q&p=$p&offset=$o2'>Вперед</a>" : ""
+echo $offset > 0 ? "<a href='?q=$q&p=$p&offset=$o1&new=$new'>Назад</a> " : " ";
+echo $offset + 50 < $c ? "<a href='?q=$q&p=$p&offset=$o2&new=$new'>Вперед</a>" : ""
 ?>
 

@@ -85,8 +85,13 @@ function phoneDemixer($t, $e) {
     return $a;
 }
 
-function get_data($q, $p = -1, $offset = 0)
+function get_data($q, $p = -1, $offset = 0, $new = 0)
 {
+    /*
+SELECT ads.* FROM ads
+where ads.phone in(SELECT phone from ads GROUP BY phone HAVING min(time) > 1585400124)
+     */
+
     global $DATA, $mysqli;
     $get_data = [];
     $n = $q;
@@ -105,6 +110,10 @@ function get_data($q, $p = -1, $offset = 0)
         $i++;
     }
     $q .= ')' . ($p != -1 ? " and phone = " . $p : " and phone != 0");
+    if($new){
+        $time = time() - 5 * 3600 * 24;
+        $q .= " and time > $time and phone not in (select phone from ads where time < $time)";
+    }
     $q .= " order by time desc";
     $data = [];
     $data['count'] = mysqli_num_rows($mysqli->query($q));

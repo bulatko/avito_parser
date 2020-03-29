@@ -13,9 +13,9 @@ if(isset($_GET['captcha'])){
     $res = get_content($url, $data);
     echo "$res<br><br><br><br><br>";
 }
+
 foreach($DATA as $q) {
     $p = new Parser($mysqli, $q);
-
     $p->parse(1, 0);
 }
 
